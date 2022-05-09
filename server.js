@@ -9,7 +9,7 @@ http.createServer(function (request, response) {
 
    var filePath = '.' + request.url;
    if (filePath == './')
-       filePath = './public/';
+       filePath = './public/index.html';
 
    console.log(filePath);
    var extname = path.extname(filePath);
