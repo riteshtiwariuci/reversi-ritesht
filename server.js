@@ -4,6 +4,9 @@ let static = require('node-static');
 /* Set up the http server library */
 let http = require('http');
 
+/* adding path dependency */
+let path = require('path');
+
 /* Assume that we are running on Heroku */
 let port = process.env.PORT;
 let directory = __dirname + '/public/index.html';
