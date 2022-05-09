@@ -9,7 +9,7 @@ let path = require('path');
 
 /* Assume that we are running on Heroku */
 let port = process.env.PORT;
-let directory = path.join(__dirname, '/public/index.html');
+let directory = __dirname + '/public/';
 
 /* IF we aren't on Heroku, then we need to adjust our port and directory */
 if ((typeof port == 'undefined') || (port === null)) {
@@ -26,7 +26,7 @@ let app = http.createServer(
         function() {
             file.serve(request, response);
         }
-        )
+        ).resume();
     }
 ).listen(port);
 console.log('The server is running');
