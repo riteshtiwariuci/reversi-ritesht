@@ -9,7 +9,7 @@ let path = require('path');
 
 /* Assume that we are running on Heroku */
 let port = process.env.PORT;
-let directory = __dirname + '/public/index.html';
+let directory = path.join(__dirname, '/public/index.html');
 
 /* IF we aren't on Heroku, then we need to adjust our port and directory */
 if ((typeof port == 'undefined') || (port === null)) {
