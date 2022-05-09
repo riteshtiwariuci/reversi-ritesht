@@ -1,50 +1,31 @@
-var http = require('http');
-var fs = require('fs');
-var path = require('path');
+/* Set up the static file server */
+let static = require('node-static');
 
-http.createServer(function (request, response) {
+/* Set up the http server library */
+let http = require('http');
 
-   console.log('request starting for ');
-   console.log(request);
+/* Assume that we are running on Heroku */
+let port = process.env.PORT;
+let directory = __dirname + '/public/index.html';
 
-   var filePath = '.' + request.url;
-   if (filePath == './')
-       filePath = './public/index.html';
+/* IF we aren't on Heroku, then we need to adjust our port and directory */
+if ((typeof port == 'undefined') || (port === null)) {
+    port = 8124;
+    directory = './public';
+}
 
-   console.log(filePath);
-   var extname = path.extname(filePath);
-   var contentType = 'text/html';
-   switch (extname) {
-       case '.js':
-           contentType = 'text/javascript';
-           break;
-       case '.css':
-           contentType = 'text/css';
-           break;
-   }
+/* Set up our static file web server to deliver files from the filesystem */
+let file = new static.Server(directory);
 
-   fs.exists(filePath, function(exists) {
-
-       if (exists) {
-           fs.readFile(filePath, function(error, content) {
-               if (error) {
-                   response.writeHead(500);
-                   response.end();
-               }
-               else {
-                   response.writeHead(200, { 'Content-Type': contentType });
-                   response.end(content, 'utf-8');
-               }
-           });
-       }
-       else {
-           response.writeHead(404);
-           response.end();
-       }
-   });
-
-}).listen(process.env.PORT);
-
-console.log('Server running ...');
+let app = http.createServer(
+    function(request, response) {
+        request.addListener('end',
+        function() {
+            file.serve(request, response);
+        }
+        )
+    }
+).listen(port);
+console.log('The server is running');
 
 
