@@ -1,0 +1,31 @@
+{
+  "name": "ritesht-reversi",
+  "version": "0.0.1",
+  "description": "This is a web version of the game reversi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://riteshtiwariuci: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@github.com/riteshtiwariuci/reversi-ritesht.git"
+  },
+  "keywords": [
+    "reversi",
+    "ritesht",
+    "riteshtiwariuci",
+    "hci",
+    "technology",
+    "game"
+  ],
+  "author": "Ritesh Tiwari (ritesht@uci.edu)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/riteshtiwariuci/reversi-ritesht/issues"
+  },
+  "homepage": "https://github.com/riteshtiwariuci/reversi-ritesht#readme",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "socket.io": "^4.5.0"
+  }
+}
