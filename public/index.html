@@ -14,13 +14,6 @@
       background-color: darkseagreen;
     }
   </style>
-  <script>
-
-    function goToLobby() {
-      let username = encodeURI($('#nameInput').val());
-      window.location.href = "lobby.html?username=" + username;
-    }
-  </script>
 
   <title>Reversi</title>
 </head>
@@ -70,6 +63,27 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
     crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
+    crossorigin="anonymous"></script>
+
+  <script>
+
+    function goToLobby() {
+      let username = encodeURI($('#nameInput').val());
+      window.location.href = "lobby.html?username=" + username;
+    }
+
+    $('#nameInput').keypress(function (e) {
+      let key = e.which;
+      if (key == 13) {// the enter key
+        $('button[id = lobbyButton]').click();
+        return false;
+
+      }
+
+    })
+  </script>
 
 </body>
 
