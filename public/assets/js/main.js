@@ -8,8 +8,8 @@ function getIRIParameterValue(requestedKey) {
         if (key === requestedKey) {
             return value;
         }
-        return null;
     }
+    return null;
 
 }
 
@@ -55,11 +55,11 @@ socket.on('join_room_response', (payload) => {
 
     let domElements = $('.socket_' + payload.socket_id);
     /* If we are being repeat notified then return*/
-    if (domElements.length !=0) {
+    if (domElements.length !==0) {
         return;
     }
 
-    console.log("Total number of active users are: " + payload.count);
+    //console.log("Total number of active users are: " + payload.count);
     /* creating the invite button */
     let nodeA = $("<div></div>");
     nodeA.addClass("row");
@@ -77,6 +77,7 @@ socket.on('join_room_response', (payload) => {
     nodeC.addClass("col");
     nodeC.addClass("text-start");
     nodeC.addClass("socket_"+payload.socket_id);
+
     let buttonC = makeInviteButton();
     nodeC.append(buttonC);
 
@@ -89,13 +90,13 @@ socket.on('join_room_response', (payload) => {
 
 
     /* Announcing in the chat that someone has arrived */
-    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + '. (There are ' + payload.count + ' users in this room) </p>';
+    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + '. (There are ' +payload.count + ' users in this room) </p>';
     let newNode = $(newHTML);
     newNode.hide();
     $('#messages').prepend(newNode);
     newNode.show("fade", 500);
 
-})
+});
 
 // player disconnected message on the client side
 
@@ -108,6 +109,7 @@ socket.on('player_disconnected', (payload) => {
     if(payload.socket_id === socket.id) {
         return;
     }
+
     let domElements = $('.socket_' +payload.socket_id);
     if (domElements.length !== 0) {
         domElements.hide("fade", 500);
@@ -129,7 +131,6 @@ function sendChatMessage() {
     console.log('**** Client log message, sending \'send_chat_message\' command: ' + JSON.stringify(request));
     socket.emit('send_chat_message', request);
     $('#chatMessage').val("");
-
 
 }
 
@@ -166,7 +167,7 @@ $(() => {
     $('#chatMessage').keypress(function (e) {
         let key = e.which;
         if (key == 13) {// the enter key
-          $('button[id = ChatButton]').click();
+          $('button[id = chatButton]').click();
           return false;
   
         }

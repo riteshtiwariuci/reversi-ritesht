@@ -54,12 +54,12 @@ io.on('connection', (socket) => {
     }
 
     serverLog('a page connected to the server: ' + socket.id);
-    
+
 
     /* join_room command handler */
     /* expected payload:
     {
-        'rooom' : the room to be joined,
+        'room' : the room to be joined,
         'username': the name of the user joining the room
 
     }
@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
     socket.on('join_room', (payload) => {
         serverLog('Server received a command', '\'join_room\'', JSON.stringify(payload));
 
-        /* Check if the data from the client */
+        /* Check if the data from the client is good*/
         if ((typeof payload == 'undefined') || (payload === null)) {
             response = {};
             response.result = 'fail';
@@ -92,7 +92,6 @@ io.on('connection', (socket) => {
             socket.emit('join_room_response', response);
             serverLog('join_room command failed', JSON.stringify(response));
             return;
-
         }
 
         let room = payload.room;
@@ -119,9 +118,9 @@ io.on('connection', (socket) => {
         /* Handle the command */
         socket.join(room);
 
-        /* Make sure the client was puit in the room */
+        /* Make sure the client was put in the room */
         io.in(room).fetchSockets().then((sockets) => {
-            serverLog('There are ' + sockets.length + ' client in the room, ' + room);
+            serverLog('There are ' + sockets.length + ' client(s) in the room, ' + room);
             /* Socket didn't join the room */
             if ((typeof sockets == 'undefined') || (sockets === null) || !sockets.includes(socket)) {
                 response = {};
@@ -133,25 +132,22 @@ io.on('connection', (socket) => {
             /* Socket did join the room */
             else {
                 players[socket.id] = {
-                    username: username,
-                    room: room
+                      username: username,
+                      room: room
                 }
                 /* Announce to everyone that is in the room, who else is in the room */
-                for (const member of sockets) { //}
-                    response = {
-                        //};
-                        result: 'success',
-                        socket_id: member.id,
-                        room: players[member.id].room,
-                        username: players[member.id].username,
-                        count: sockets.length
+                  for (const member of sockets) {
+                      response = {
+                          result: 'success',
+                          socket_id: member.id,
+                          room: players[member.id].room,
+                          username: players[member.id].username,
+                          count: sockets.length
+                      }
+                /* Tell everyone that a new user has joined the chat room. SocketID not required. */
+                        io.of('/').to(room).emit('join_room_response', response);
+                        serverLog('join_room succeeded', JSON.stringify(response));
                     }
-                }
-
-
-                /* Tell everyone that a new user has joined the chat room */
-                io.of('/').to(room).emit('join_room_response', response);
-                serverLog('join_room command succeeded', JSON.stringify(response));
             }
 
         });
@@ -160,7 +156,7 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         serverLog('a page disconnected from the server: ' + socket.id);
-        if((typeof players[socket.id] != 'undefined') && (players[socket.id] != null)) {
+        if ((typeof players[socket.id] != 'undefined') && (players[socket.id] != null)) {
             let payload = {
                 username: players[socket.id].username,
                 room: players[socket.id].room,
@@ -171,9 +167,8 @@ io.on('connection', (socket) => {
             delete players[socket.id];
             /* Tell everyone who left the room*/
             io.of("/").to(room).emit('player_disconnected', payload);
-            serverLog('player_disconnected succeeded', JSON.stringify(payload));
+            serverLog('player_disconnected succeeded ', JSON.stringify(payload));
         }
-
     });
 
     /* send_chat_message command handler */
@@ -230,7 +225,7 @@ io.on('connection', (socket) => {
         if ((typeof username == 'undefined') || (username === null)) {
             response = {};
             response.result = 'fail';
-            response.message = 'client did not send a valid username as message source ';
+            response.message = 'client did not send a valid username as a message source ';
             socket.emit('send_chat_message_response', response);
             serverLog('send_chat_message command failed', JSON.stringify(response));
             return;
