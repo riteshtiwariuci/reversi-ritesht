@@ -1,0 +1,28 @@
+.about {
+color: gray;
+text-decoration: none;
+}
+
+.about:hover {
+    color: gray;
+    text-decoration: underline;
+}
+
+body {
+    background-color: white;
+}
+
+.logo-img {
+    max-width: 30%;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20vh;
+}
+
+#lobbyButton {
+    background-color: #f4b400;
+    border-color: transparent;
+}

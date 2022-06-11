@@ -11,6 +11,27 @@ body {
     background-color: rgb(247, 247, 247);
     font-style: italic;
   }
+  
+  #gameTitle {
+    font-size: x-large;
+  }
+
+  #messagePane {
+    height: 80vh;
+    border-radius: 1rem;
+  }
+
+  #messagePane > div {
+      margin-top: 1rem;
+  } 
+
+  #chatButton {
+    max-width: 10rem;
+    background-color: #f4b400;
+    border-color: transparent;
+}
+
+
 
   .chat_message {
     font-size: 125%;
@@ -25,6 +46,7 @@ body {
   }
 
   table#game_board td{
+    /* background-color: rgb(83, 168, 83); */
     border: 1px solid black;
     margin: 0px;
     padding: 0px;
@@ -32,5 +54,4 @@ body {
 
   td.hovered_over:hover {
     background-image: url('/assets/images/hover.gif');
-
   }

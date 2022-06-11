@@ -1,0 +1,44 @@
+#messagePane {
+    height: calc(100vh - 30px);
+    border: 1px solid #f4b400;
+    border-radius: 1rem;
+}
+
+#messagePane > div {
+    margin-top: 1rem;
+} 
+
+#chatButton {
+    max-width: 10rem;
+    background-color: #f4b400;
+    border-color: transparent;
+}
+
+.about {
+    color: gray;
+    text-decoration: none;
+}
+
+.about:hover {
+    color: gray;
+    text-decoration: underline;
+}
+
+.playerLabel {
+    font-size: larger;
+}
+
+.eachPlayer {
+    display: list-item;
+}
+
+.inviteButton {
+    line-height: 0.4em;
+}
+
+.eachPlayer div {
+    display: inline-block;
+    vertical-align: bottom;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
