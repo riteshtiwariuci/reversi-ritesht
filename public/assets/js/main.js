@@ -14,7 +14,7 @@ function getIRIParameterValue(requestedKey) {
 }
 
 let username = decodeURI(getIRIParameterValue('username'));
-if ((typeof username == 'undefined') || (username === null) || (username === 'null') || (username === ""))  {
+if ((typeof username == 'undefined') || (username === null) || (username === 'null') || (username === "")) {
     username = "Anonymous_" + Math.floor(Math.random() * 1000);
 
 }
@@ -32,11 +32,11 @@ socket.on('log', function (array) {
 });
 
 function makeInviteButton(socket_id) {
-    let newHTML = "<button type ='button' class = 'btn btn-outline-primary'> Invite </button>";
+    let newHTML = "<button type ='button' class = 'btn btn-outline-primary rounded-pill inviteButton'> Invite </button>";
     let newNode = $(newHTML);
-    newNode.click( () => {
+    newNode.click(() => {
         let payload = {
-         requested_user:socket_id
+            requested_user: socket_id
         }
         console.log('**** Client log message, sending \'invite\' command: ' + JSON.stringify(payload));
         socket.emit('invite', payload);
@@ -47,11 +47,11 @@ function makeInviteButton(socket_id) {
 
 /* Make invited button */
 function makeInvitedButton(socket_id) {
-    let newHTML = "<button type ='button' class = 'btn btn-primary'> Invited </button>";
+    let newHTML = "<button type ='button' class = 'btn btn-outline-warning rounded-pill inviteButton'> Invited </button>";
     let newNode = $(newHTML);
-    newNode.click( () => {
+    newNode.click(() => {
         let payload = {
-        requested_user:socket_id
+            requested_user: socket_id
         }
         console.log('**** Client log message, sending \'uninvite\' command: ' + JSON.stringify(payload));
         socket.emit('uninvite', payload);
@@ -62,11 +62,11 @@ function makeInvitedButton(socket_id) {
 
 /* Make Play button */
 function makePlayButton(socket_id) {
-    let newHTML = "<button type ='button' class = 'btn btn-success'> Play </button>";
+    let newHTML = "<button type ='button' class = 'btn btn-success rounded-pill inviteButton'> Play </button>";
     let newNode = $(newHTML);
-    newNode.click( () => {
+    newNode.click(() => {
         let payload = {
-        requested_user:socket_id
+            requested_user: socket_id
         }
         console.log('**** Client log message, sending \'game_start\' command: ' + JSON.stringify(payload));
         socket.emit('game_start', payload);
@@ -97,7 +97,7 @@ socket.on('invite_response', (payload) => {
     }
     console.log('******* Make invited button is being called *******************');
     let newNode = makeInvitedButton(payload.socket_id);
-    $('.socket_'+ payload.socket_id + ' button').replaceWith(newNode);
+    $('.socket_' + payload.socket_id + ' button').replaceWith(newNode);
 })
 
 /* invite response*/
@@ -112,7 +112,7 @@ socket.on('invited', (payload) => {
 
     }
     let newNode = makePlayButton(payload.socket_id);
-    $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
+    $('.socket_' + payload.socket_id + ' button').replaceWith(newNode);
 })
 
 /* uninvite response*/
@@ -127,7 +127,7 @@ socket.on('uninvited', (payload) => {
 
     }
     let newNode = makeInviteButton(payload.socket_id);
-    $('.socket_'+ payload.socket_id + ' button').replaceWith(newNode);
+    $('.socket_' + payload.socket_id + ' button').replaceWith(newNode);
     console.log('MakeInvite button called .....');
 })
 
@@ -143,7 +143,7 @@ socket.on('game_start_response', (payload) => {
 
     }
     let newNode = makeStartGameButton();
-    $('.socket_'+ payload.socket_id + ' button').replaceWith(newNode);
+    $('.socket_' + payload.socket_id + ' button').replaceWith(newNode);
     /* Jump to the game page */
     window.location.href = 'game.html?username=' + username + '&game_id=' + payload.game_id;
 });
@@ -166,28 +166,28 @@ socket.on('join_room_response', (payload) => {
 
     let domElements = $('.socket_' + payload.socket_id);
     /* If we are being repeat notified then return*/
-    if (domElements.length !==0) {
+    if (domElements.length !== 0) {
         return;
     }
 
     //console.log("Total number of active users are: " + payload.count);
     /* creating the invite button */
-    let nodeA = $("<div></div>");
+    let nodeA = $("<li></li>");
     nodeA.addClass("row");
-    nodeA.addClass("aling-items-center");
-    nodeA.addClass("socket_"+payload.socket_id);
+    nodeA.addClass("eachPlayer");
+    nodeA.addClass("socket_" + payload.socket_id);
     nodeA.hide();
 
     let nodeB = $("<div></div>");
-    nodeB.addClass("col");
-    nodeB.addClass("text-end");
-    nodeB.addClass("socket_"+payload.socket_id);
-    nodeB.append('<h4>'+payload.username+'</h4>');
+    nodeB.addClass("col-3");
+    nodeB.addClass("text-start");
+    nodeB.addClass("socket_" + payload.socket_id);
+    nodeB.append('<span>' + payload.username + '</span>');
 
     let nodeC = $("<div></div>");
-    nodeC.addClass("col");
+    nodeC.addClass("col-auto");
     nodeC.addClass("text-start");
-    nodeC.addClass("socket_"+payload.socket_id);
+    nodeC.addClass("socket_" + payload.socket_id);
 
     let buttonC = makeInviteButton(payload.socket_id);
     nodeC.append(buttonC);
@@ -201,7 +201,7 @@ socket.on('join_room_response', (payload) => {
 
 
     /* Announcing in the chat that someone has arrived */
-    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the chatroom . (There are ' +payload.count + ' users in this room) </p>';
+    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the chatroom . (There are ' + payload.count + ' users in this room) </p>';
     let newNode = $(newHTML);
     newNode.hide();
     $('#messages').prepend(newNode);
@@ -217,11 +217,11 @@ socket.on('player_disconnected', (payload) => {
         return;
     }
 
-    if(payload.socket_id === socket.id) {
+    if (payload.socket_id === socket.id) {
         return;
     }
 
-    let domElements = $('.socket_' +payload.socket_id);
+    let domElements = $('.socket_' + payload.socket_id);
     if (domElements.length !== 0) {
         domElements.hide("fade", 500);
     }
@@ -255,7 +255,7 @@ socket.on('send_chat_message_response', (payload) => {
         return;
 
     }
-    let newHTML = '<p class=\'chat_message\'><b>' + payload.username + '</b>: '+payload.message+'</p>';
+    let newHTML = '<p class=\'chat_message\'><b>' + payload.username + '</b>: ' + payload.message + '</p>';
     let newNode = $(newHTML);
     newNode.hide();
     $('#messages').prepend(newNode);
@@ -264,18 +264,19 @@ socket.on('send_chat_message_response', (payload) => {
 })
 
 /* game response */
-let old_board  = [
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?'],
-    ['?','?','?','?','?','?','?','?']
+let old_board = [
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?'],
+    ['?', '?', '?', '?', '?', '?', '?', '?']
 ];
 
 let my_color = "";
+let interval_timer;
 
 socket.on('game_update', (payload) => {
     if ((typeof payload == 'undefined') || (payload === null)) {
@@ -293,24 +294,51 @@ socket.on('game_update', (payload) => {
         return;
     }
     /* Update my color */
-    if(socket.id === payload.game.player_white.socket) {
+    if (socket.id === payload.game.player_white.socket) {
         my_color = 'white';
     }
-    else if(socket.id === payload.game.player_black.socket) {
+    else if (socket.id === payload.game.player_black.socket) {
         my_color = 'black';
     }
-    else  {
+    else {
         window.location.href = 'lobby.html?username=' + username;
         return;
     }
-    $("#my_color").html('<h3 id="my_color"> I am '+ my_color + '</h3>');
 
-        let whitesum = 0;
-        let blacksum = 0;
+    if (my_color === 'white') {
+        $("#my_color").html('<h3 id="my_color"> I am white</h3>');
+
+    }
+    else if (my_color === 'black') {
+        $("#my_color").html('<h3 id="my_color"> I am black</h3>');
+
+    }
+    else {
+        $("#my_color").html('<h3 id="my_color"> Error: I don\'t know what color I am</h3>');
+
+    }
+
+    /* whose turn is it */
+    if (payload.game.whose_turn === 'white') {
+        $("#my_color").append('<h4> It is white\'s turn</h4>');
+
+    }
+    else if (payload.game.whose_turn === 'black') {
+        $("#my_color").append('<h4> It is black\'s turn</h4>');
+
+    }
+    else {
+        $("#my_color").append('<h4> Error: Don\'t know whose turn is it</h4>');
+
+    }
+
+
+    let whitesum = 0;
+    let blacksum = 0;
 
     /* Animate changes to the board */
-    for (let row =0; row < 8; row++) {
-        for (let column =0; column < 8; column++) {
+    for (let row = 0; row < 8; row++) {
+        for (let column = 0; column < 8; column++) {
             if (board[row][column] === 'w') {
                 whitesum++;
             }
@@ -319,46 +347,46 @@ socket.on('game_update', (payload) => {
             }
 
             /* check to see if the server changed any space on the board */
-            if(old_board[row][column] !== board[row][column]) {
+            if (old_board[row][column] !== board[row][column]) {
                 let graphic = "";
                 let altTag = "";
-                if((old_board[row][column] === '?') && (board[row][column] === ' ')) {
+                if ((old_board[row][column] === '?') && (board[row][column] === ' ')) {
                     graphic = 'empty.gif';
                     altTag = "empty space";
                 }
-                else if((old_board[row][column] === '?') && (board[row][column] === 'w')) {
+                else if ((old_board[row][column] === '?') && (board[row][column] === 'w')) {
                     graphic = 'empty_to_white.gif';
                     altTag = "white token";
                 }
 
-                else if((old_board[row][column] === '?') && (board[row][column] === 'b')) {
+                else if ((old_board[row][column] === '?') && (board[row][column] === 'b')) {
                     graphic = 'empty_to_black.gif';
                     altTag = "black token";
                 }
-                else if((old_board[row][column] === ' ') && (board[row][column] === 'w')) {
+                else if ((old_board[row][column] === ' ') && (board[row][column] === 'w')) {
                     graphic = 'empty_to_white.gif';
                     altTag = "white token";
                 }
 
-                else if((old_board[row][column] === ' ') && (board[row][column] === 'b')) {
+                else if ((old_board[row][column] === ' ') && (board[row][column] === 'b')) {
                     graphic = 'empty_to_black.gif';
                     altTag = "black token";
                 }
-                else if((old_board[row][column] === 'w') && (board[row][column] === ' ')) {
+                else if ((old_board[row][column] === 'w') && (board[row][column] === ' ')) {
                     graphic = 'white_to_empty.gif';
                     altTag = "empty space";
                 }
 
-                else if((old_board[row][column] === 'b') && (board[row][column] === ' ')) {
+                else if ((old_board[row][column] === 'b') && (board[row][column] === ' ')) {
                     graphic = 'black_to_empty.gif';
                     altTag = "empty space";
                 }
-                else if((old_board[row][column] === 'w') && (board[row][column] === 'b')) {
+                else if ((old_board[row][column] === 'w') && (board[row][column] === 'b')) {
                     graphic = 'white_to_black.gif';
                     altTag = "black token";
                 }
 
-                else if((old_board[row][column] === 'b') && (board[row][column] === 'w')) {
+                else if ((old_board[row][column] === 'b') && (board[row][column] === 'w')) {
                     graphic = 'black_to_white.gif';
                     altTag = "white token";
                 }
@@ -367,11 +395,16 @@ socket.on('game_update', (payload) => {
                     altTag = "error";
                 }
                 const t = Date.now();
-                $('#'+row+'_'+column).html('<img class="img-fluid" src="assets/images/' +graphic+'?time='+t+' " alt = "'+altTag+ ' " />');
-                $('#'+row+'_'+column).off('click');
-                if (board[row][column] === ' ') {
+                $('#' + row + '_' + column).html('<img class="img-fluid" src="assets/images/' + graphic + '?time=' + t + ' " alt = "' + altTag + ' " />');
+            }
+
+            /* Setup Interactivity*/
+            $('#' + row + '_' + column).off('click');
+            $('#' + row + '_' + column).removeClass('hovered_over');
+            if (payload.game.whose_turn === my_color) {
+                if (payload.game.legal_moves[row][column] === my_color.substring(0, 1)) {
                     $('#' + row + '_' + column).addClass('hovered_over');
-                    $('#' + row + '_' + column).click(((r,c) => {
+                    $('#' + row + '_' + column).click(((r, c) => {
                         return (() => {
                             let payload = {
                                 row: r,
@@ -385,16 +418,40 @@ socket.on('game_update', (payload) => {
                     })(row, column));
 
                 }
-                else {
-
-                    $('#' + row + '_' + column).removeClass('hovered_over');
-                }
-
             }
-
         }
 
     }
+    /* update time */
+    clearInterval(interval_timer);
+    interval_timer = setInterval(((last_time) => {
+        return (() => {
+            let d = new Date();
+            let elapsed_m = d.getTime() - last_time;
+            let minutes = Math.floor(elapsed_m / (60 * 1000));
+            let seconds = Math.floor((elapsed_m % (60 * 1000)) / 1000);
+            let total = (minutes * 60) + seconds;
+            if (total > 100) {
+                total = 100;
+            } 
+
+            $("#elapsed").css("width", total + "%").attr("aria-valuenow", total);
+            let timestring = "" + seconds;
+            timestring = timestring.padStart(2, '0');
+            timestring = minutes + ":" + timestring;
+            if (total < 100) {
+                $("#elapsed").html(timestring);
+            }
+            else {
+                $("#elapsed").html("Times up!");
+            }
+
+        })
+
+    })(payload.game.last_move_time)
+        , 1000);
+
+
     $("#whitesum").html(whitesum);
     $("#blacksum").html(blacksum);
     old_board = board;
@@ -409,6 +466,7 @@ socket.on('play_token_response', (payload) => {
     }
     if (payload.result === 'fail') {
         console.log(payload.message);
+        alert(payload.message);
         return;
 
     }
@@ -449,17 +507,23 @@ $(() => {
     console.log('**** Client log message, sending \'join_room\' command: ' + JSON.stringify(request));
     socket.emit('join_room', request);
 
-    $("#lobbyTitle").html(username + "'s Lobby");
+    $("#lobbyTitle").html(`<span class="badge rounded-pill bg-warning">${username}'s Lobby</span>`);
     $("#quit").html("<a href ='lobby.html?username=" + username + " ' class='btn btn-danger' role='button'> Quit </a>");
-    
+
     $('#chatMessage').keypress(function (e) {
         let key = e.which;
         if (key == 13) {// the enter key
-          $('button[id = chatButton]').click();
-          return false;
-  
-        }
-  
-      })
+            $('button[id = chatButton]').click();
+            return false;
 
+        }
+
+    })
+    
 });
+
+// $("td").hover(function (event) {
+//     $(event.target).append(`<div class="tooltip">"wassup"</div>`)
+// }, function () {
+//     console.log('bye');
+// });
